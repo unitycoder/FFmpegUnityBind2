@@ -27,6 +27,10 @@ https://www.youtube.com/watch?v=hTt8QWDm1rY
 
 With FFmpeg Unity Bind 2, you can do the following and much more:
 
+### NOTE
+- download missing mobile-ffmpeg-full-gpl-4.4.LTS.aar file from https://nexus.web.cern.ch/nexus/content/groups/public/com/arthenica/mobile-ffmpeg-full/4.4.LTS/
+- place it into Assets\Plugins\Android\libs
+
 SCREEN CAPTURING / GAME RECORDING TO FILE
 
 Instead of capturing all system screens, the FFmpegREC 2 component captures the 3D Scene Camera view. This gives you a huge advantage over other capturing software by allowing you to record objects only on selected layers. You can exclude the UI or select specific 3D objects.
