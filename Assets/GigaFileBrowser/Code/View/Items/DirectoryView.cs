@@ -16,7 +16,7 @@ namespace GigaFileBrowser.Internal.View
 
         protected override void OnClick()
         {
-            FindObjectOfType<FileBrowserView>().UpdateView(Path);
+            FindFirstObjectByType<FileBrowserView>().UpdateView(Path);
         }
 
         void Awake()
@@ -27,9 +27,9 @@ namespace GigaFileBrowser.Internal.View
 
         void OnLongPressButton()
         {
-            if(mode <= LookupMode.ChooseDirectories)
+            if (mode <= LookupMode.ChooseDirectories)
             {
-                FindObjectOfType<FileBrowserView>().Select(this);
+                FindFirstObjectByType<FileBrowserView>().Select(this);
             }
         }
     }

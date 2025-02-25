@@ -27,7 +27,7 @@ namespace GigaFileBrowser.Internal.View
         {
             if (mode >= LookupMode.ChooseFile)
             {
-                FindObjectOfType<FileBrowserView>().Select(this);
+                Object.FindFirstObjectByType<FileBrowserView>().Select(this);
             }
         }
     }

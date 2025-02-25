@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +14,7 @@ namespace FFmpegUnityBind2.Demo
             {
                 if (!instance)
                 {
-                    instance = FindObjectOfType<Console>();
+                    instance = FindFirstObjectByType<Console>();
                 }
                 return instance;
             }
@@ -62,7 +61,7 @@ namespace FFmpegUnityBind2.Demo
             Instance.ClearInternal();
         }
 
-#region FORCE UPDATE LAYOUT GROUP
+        #region FORCE UPDATE LAYOUT GROUP
 
         void Update()
         {
@@ -117,7 +116,7 @@ namespace FFmpegUnityBind2.Demo
 
         void ClearInternal()
         {
-            while(chunks.Count > 0)
+            while (chunks.Count > 0)
             {
                 DestroyImmediate(chunks[0].gameObject);
                 chunks.RemoveAt(0);
