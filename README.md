@@ -22,7 +22,7 @@ https://user-images.githubusercontent.com/9005398/216793662-fd4c35a8-41dc-47ec-a
 
 ![8](https://user-images.githubusercontent.com/9005398/216792718-0d5303d7-b2bb-4a8b-837f-0539180b0b70.jpg)
 
-Video overview and tutorial:
+###  Video overview and tutorial:
 https://www.youtube.com/watch?v=hTt8QWDm1rY
 
 With FFmpeg Unity Bind 2, you can do the following and much more:
@@ -31,67 +31,67 @@ With FFmpeg Unity Bind 2, you can do the following and much more:
 - download missing mobile-ffmpeg-full-gpl-4.4.LTS.aar file from https://nexus.web.cern.ch/nexus/content/groups/public/com/arthenica/mobile-ffmpeg-full/4.4.LTS/
 - place it into Assets\Plugins\Android\libs
 
-SCREEN CAPTURING / GAME RECORDING TO FILE
+### SCREEN CAPTURING / GAME RECORDING TO FILE
 
 Instead of capturing all system screens, the FFmpegREC 2 component captures the 3D Scene Camera view. This gives you a huge advantage over other capturing software by allowing you to record objects only on selected layers. You can exclude the UI or select specific 3D objects.
 
-CAMERA CAPTURING / WEBCAM RECORDING TO FILE
+### CAMERA CAPTURING / WEBCAM RECORDING TO FILE
 
 The package captures video from a device camera and saves it to a file. The demo also shows how to render a device camera video preview. Thanks to the features mentioned above, additional objects can be rendered on top of the device camera view.
 
-SYSTEM AUDIO RECORDING
+### SYSTEM AUDIO RECORDING
 
 Gain access to sounds and music inside your app.
 
-MICROPHONE RECORDING
+### MICROPHONE RECORDING
 
 Optionally, you can record from the microphone. Choose the audio mode you want during video recording.
 
-CONVERT
+### CONVERT
 
 Transform any video format to another video or audio format.
 
-DECODE
+### DECODE
 
 Unpack video into a frame/image sequence and audio file. You can then manipulate the frames/images and re-encode them.
 
-ENCODE
+### ENCODE
 
 Pack a frame/image sequence and audio file into an efficient compressed video. You can also create slideshows with music.
 
-STREAM TO YOUTUBE
+### STREAM TO YOUTUBE
 
 Easily stream to YouTube by passing the stream key.
 
-STREAM TO OTHER RTMP, RTP, TCP, UDP SERVICES
+### STREAM TO OTHER RTMP, RTP, TCP, UDP SERVICES
 
 Create custom service commands similar to those for YouTube.
 
-CUT / TRIM / SPLIT / MAKE PIECES
+### CUT / TRIM / SPLIT / MAKE PIECES
 
 Specify the start and end times of a video chunk and extract it as a file.
 
-COMPRESS
+### COMPRESS
 
 Specify the quality parameter (0.0 - 1.0) to achieve compressed or lossless results.
 
-CONCAT / APPEND / COMBINE / UNITE / MERGE
+### CONCAT / APPEND / COMBINE / UNITE / MERGE
 
 List all the video files you want to combine into a single video.
 
-ADD SOUND
+### ADD SOUND
 
 Replace or add an audio track to an existing video clip.
 
-WATERMARK
+### WATERMARK
 
 Overlay an image or multiple images in any form and position on top of the video. Alternatively, place a video in a selected area on top of an image.
 
-MULTITHREADING / ASYNC
+### MULTITHREADING / ASYNC
 
 The FFmpeg API is thread-safe, allowing you to execute commands in parallel. Convert, cut, concatenate, etc., as many files as you wish simultaneously.
 
-PLATFORMS
+### PLATFORMS
 
 * IOS
 * Android (64-bit IL2CPP; 32-bit Mono)
