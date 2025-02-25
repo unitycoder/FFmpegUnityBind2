@@ -76,3 +76,5 @@ crashlytics-build.properties
 # custom
 ffmpeg.exe
 UserSettings/
+Assets/Plugins/Android/libs/mobile-ffmpeg-full-gpl-4.4.LTS.aar
+Assets/Plugins/Android/libs/mobile-ffmpeg-full-gpl-4.4.LTS.aar.meta
