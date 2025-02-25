@@ -46,7 +46,7 @@ namespace FFmpegUnityBind2.Demo
 
         void Awake()
         {
-            for(int i = 0; i < demoCasesButtons.Length; ++i)
+            for (int i = 0; i < demoCasesButtons.Length; ++i)
             {
                 //Bind buttons to Demo Cases
                 demoCasesButtons[i].onClick.AddListener(demoCases[i].Open);
@@ -57,13 +57,21 @@ namespace FFmpegUnityBind2.Demo
         {
             spinningWheelView.Open();
 
+
             string demoRelativeFilePath = "Demo/DemoFile.mp4";
             string demoFilePath = Path.Combine(Application.persistentDataPath, demoRelativeFilePath);
-
             if (!File.Exists(demoFilePath))
             {
                 yield return FileUnpacker.UnpackFileOperation(demoRelativeFilePath, demoFilePath);
                 Debug.Log($"Unpacked to: {Application.persistentDataPath}");
+            }
+
+            // copy sample file??
+            demoRelativeFilePath = "Demo/DemoWatermark.png";
+            demoFilePath = Path.Combine(Application.streamingAssetsPath, demoRelativeFilePath);
+            if (File.Exists(demoFilePath) && File.Exists(Path.Combine(Application.persistentDataPath, demoRelativeFilePath)) == false)
+            {
+                File.Copy(demoFilePath, Path.Combine(Application.persistentDataPath, demoRelativeFilePath));
             }
 
             spinningWheelView.Close();
