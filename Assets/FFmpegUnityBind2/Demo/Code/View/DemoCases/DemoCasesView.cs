@@ -57,7 +57,6 @@ namespace FFmpegUnityBind2.Demo
         {
             spinningWheelView.Open();
 
-
             string demoRelativeFilePath = "Demo/DemoFile.mp4";
             string demoFilePath = Path.Combine(Application.persistentDataPath, demoRelativeFilePath);
             if (!File.Exists(demoFilePath))
@@ -66,14 +65,24 @@ namespace FFmpegUnityBind2.Demo
                 Debug.Log($"Unpacked to: {Application.persistentDataPath}");
             }
 
-            // copy sample file??
+            demoRelativeFilePath = "Demo/DemoWatermark.png";
+            demoFilePath = Path.Combine(Application.persistentDataPath, demoRelativeFilePath);
+            if (!File.Exists(demoFilePath))
+            {
+                yield return FileUnpacker.UnpackFileOperation(demoRelativeFilePath, demoFilePath);
+                Debug.Log($"Unpacked to: {demoFilePath}");
+            }
+
+
+            // copy sample file in windows?
+#if UNITY_EDITOR
             demoRelativeFilePath = "Demo/DemoWatermark.png";
             demoFilePath = Path.Combine(Application.streamingAssetsPath, demoRelativeFilePath);
             if (File.Exists(demoFilePath) && File.Exists(Path.Combine(Application.persistentDataPath, demoRelativeFilePath)) == false)
             {
                 File.Copy(demoFilePath, Path.Combine(Application.persistentDataPath, demoRelativeFilePath));
             }
-
+#endif
             spinningWheelView.Close();
         }
     }

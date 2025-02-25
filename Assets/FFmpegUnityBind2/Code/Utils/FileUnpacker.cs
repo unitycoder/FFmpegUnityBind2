@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace FFmpegUnityBind2.Utils
 {
@@ -38,60 +39,76 @@ namespace FFmpegUnityBind2.Utils
             Debug.Log($"relativePath: {relativePath}");
             Debug.Log($"destinationPath: {mainDestinationPath}");
 
-            relativePath = ToZipPath(relativePath);
-            string streamingAssetsSourcePath = Path.Combine(Application.streamingAssetsPath, relativePath);
+            // Decide if the file is expected to be zipped or not.
+            bool isZipped = !relativePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase);
+
+            // Only change the extension if the file is zipped.
+            string streamingAssetsFilePath = isZipped ? ToZipPath(relativePath) : relativePath;
+            string streamingAssetsSourcePath = Path.Combine(Application.streamingAssetsPath, streamingAssetsFilePath);
             Debug.Log($"streamingAssetsSourcePath: {streamingAssetsSourcePath}");
+
+            // For Android, streamingAssetsPath returns a URI inside the APK.
             string streamingAssetsSourceUri = Application.platform == RuntimePlatform.Android
                 ? streamingAssetsSourcePath
                 : "file://" + streamingAssetsSourcePath;
             Debug.Log($"streamingAssetsSourceUri: {streamingAssetsSourceUri}");
 
-            #pragma warning disable 0618
-            var streamingAssetsOperation = new WWW(streamingAssetsSourceUri);
-            #pragma warning restore 0618
-            yield return streamingAssetsOperation;
+            // Use UnityWebRequest instead of WWW (WWW is obsolete).
+            UnityWebRequest request = UnityWebRequest.Get(streamingAssetsSourceUri);
+            yield return request.SendWebRequest();
 
-            byte[] bytes = new byte[streamingAssetsOperation.bytesDownloaded];
-            Array.Copy(streamingAssetsOperation.bytes, bytes, streamingAssetsOperation.bytesDownloaded);
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error downloading file: {request.error}");
+                yield break;
+            }
+
+            byte[] bytes = request.downloadHandler.data;
+            if (bytes == null)
+            {
+                Debug.LogError("Downloaded bytes are null!");
+                yield break;
+            }
 
             string destinationDirectory = Path.GetDirectoryName(mainDestinationPath);
             Directory.CreateDirectory(destinationDirectory);
             Debug.Log($"destinationDirectory: {destinationDirectory}");
 
-            string destinationZipPath = ToZipPath(mainDestinationPath);
-            File.WriteAllBytes(destinationZipPath, bytes);
-            Debug.Log($"destinationZipPath: {destinationZipPath}");
-
-            string tempDestinationDirectory = Path.Combine(destinationDirectory, $"TempUnzipDirectory");
-            Directory.CreateDirectory(tempDestinationDirectory);
-            Debug.Log($"tempDestinationDirectory: {tempDestinationDirectory}");
-
-            new FastZip().ExtractZip(destinationZipPath, tempDestinationDirectory, null);
-
-            var tempDestinationPaths = new List<string>(Directory.GetFiles(tempDestinationDirectory));
-
-            string mainTempDestinationPath = Path.Combine(tempDestinationDirectory, Path.GetFileName(mainDestinationPath));
-            tempDestinationPaths.Remove(mainTempDestinationPath);
-            tempDestinationPaths.Add(mainTempDestinationPath);
-
-            Debug.Log($"mainTempDestinationPath: {tempDestinationPaths.Last()}");
-
-            foreach (string tempDestinationPath in tempDestinationPaths)
+            if (isZipped)
             {
-                Debug.Log($"tempDestinationPath: {tempDestinationPath}");
+                // Save the zip file.
+                string destinationZipPath = ToZipPath(mainDestinationPath);
+                File.WriteAllBytes(destinationZipPath, bytes);
+                Debug.Log($"destinationZipPath: {destinationZipPath}");
 
-                string destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(tempDestinationPath));
+                // Extract the zip file.
+                string tempDestinationDirectory = Path.Combine(destinationDirectory, "TempUnzipDirectory");
+                Directory.CreateDirectory(tempDestinationDirectory);
+                Debug.Log($"tempDestinationDirectory: {tempDestinationDirectory}");
 
-                if (File.Exists(destinationPath))
+                new FastZip().ExtractZip(destinationZipPath, tempDestinationDirectory, null);
+
+                // Assume the extracted file has the same name as the intended destination.
+                string extractedFilePath = Path.Combine(tempDestinationDirectory, Path.GetFileName(mainDestinationPath));
+                if (File.Exists(extractedFilePath))
                 {
-                    File.Delete(destinationPath);
+                    File.Move(extractedFilePath, mainDestinationPath);
+                }
+                else
+                {
+                    Debug.LogError("Extracted file not found!");
                 }
 
-                File.Move(tempDestinationPath, destinationPath);
+                // Clean up.
+                File.Delete(destinationZipPath);
+                Directory.Delete(tempDestinationDirectory, true);
             }
-
-            File.Delete(destinationZipPath);
-            Directory.Delete(tempDestinationDirectory, true);
+            else
+            {
+                // Directly write the non-zipped file.
+                File.WriteAllBytes(mainDestinationPath, bytes);
+                Debug.Log($"File copied to: {mainDestinationPath}");
+            }
         }
 
         static IEnumerator UnpackFilesOperation(string[] relativePaths, string[] destinationPaths)
